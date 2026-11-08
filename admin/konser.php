@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 flash("err", "Gagal menghapus konser.");
             }
         }
-        alihkan("/admin/konser.php");
+        alihkan("/FunKonser/admin/konser.php");
     }
 
     // ----- SIMPAN (tambah / ubah) -----
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if ($posterBaru && $posterLama) hapusFilePoster($posterLama);
 
                 flash("ok", $formId > 0 ? "Konser berhasil diperbarui." : "Konser berhasil ditambahkan.");
-                alihkan("/admin/konser.php");
+                alihkan("/FunKonser/admin/konser.php");
 
             } catch (Throwable $ex) {
                 $conn->rollback();
@@ -283,17 +283,18 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
 
     <header class="bg-violet text-white">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
-            <a href="/admin/index.php" class="text-2xl font-extrabold tracking-tight">
+            <a href="/FunKonser/admin/index.php" class="text-2xl font-extrabold tracking-tight">
                 FunKonser<span class="text-lemon">.</span>
                 <span class="ml-2 text-xs font-bold bg-lemon text-ink rounded-full px-2 py-1 align-middle">ADMIN</span>
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
-                <a href="/admin/index.php" class="hover:underline">Dashboard</a>
-                <a href="/admin/konser.php" class="underline underline-offset-4">Konser</a>
-                <a href="/admin/pesanan.php" class="hover:underline">Pesanan</a>
-                <a href="/index.php" class="hover:underline">Lihat Situs</a>
+                <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
+                <a href="/FunKonser/admin/konser.php" class="underline underline-offset-4">Konser</a>
+                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
+                <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>
+                <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="text-white/80"><?= e($_SESSION["nama"] ?? "Admin") ?></span>
-                <a href="/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
+                <a href="/FunKonser/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
             </nav>
         </div>
     </header>
@@ -306,7 +307,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 <p class="text-ink/60 mt-1">Tambah, ubah, dan hapus data konser.</p>
             </div>
             <?php if (!$tampilForm): ?>
-                <a href="/admin/konser.php?tambah=1"
+                <a href="/FunKonser/admin/konser.php?tambah=1"
                    class="bg-violet text-white font-bold px-5 py-3 rounded-xl hover:brightness-110">+ Tambah Konser</a>
             <?php endif; ?>
         </div>
@@ -327,7 +328,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 </div>
             <?php endif; ?>
 
-            <form action="/admin/konser.php" method="post" enctype="multipart/form-data" class="mt-5 grid md:grid-cols-2 gap-5">
+            <form action="/FunKonser/admin/konser.php" method="post" enctype="multipart/form-data" class="mt-5 grid md:grid-cols-2 gap-5">
                 <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                 <input type="hidden" name="aksi" value="simpan">
                 <input type="hidden" name="id" value="<?= (int) $idForm ?>">
@@ -399,14 +400,14 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                     <button type="submit" class="bg-violet text-white font-bold px-6 py-3 rounded-xl hover:brightness-110">
                         <?= $idForm > 0 ? "Simpan Perubahan" : "Simpan" ?>
                     </button>
-                    <a href="/admin/konser.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
+                    <a href="/FunKonser/admin/konser.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
                 </div>
             </form>
         </section>
         <?php endif; ?>
 
         <!-- ============ DAFTAR KONSER ============ -->
-        <form method="get" action="/admin/konser.php" class="mt-6 flex flex-wrap gap-3">
+        <form method="get" action="/FunKonser/admin/konser.php" class="mt-6 flex flex-wrap gap-3">
             <input type="text" name="q" value="<?= e($q) ?>" placeholder="Cari judul atau artis..."
                    class="flex-1 min-w-[200px] border border-ink/20 rounded-xl px-4 py-3 outline-none focus:border-violet">
             <select name="status" class="border border-ink/20 rounded-xl px-4 py-3 bg-white">
@@ -457,13 +458,13 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                                 </span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                <a href="/admin/kategori.php?konser_id=<?= (int) $k["id"] ?>" class="font-bold text-violet hover:underline">
+                                <a href="/FunKonser/admin/kategori.php?konser_id=<?= (int) $k["id"] ?>" class="font-bold text-violet hover:underline">
                                     <?= (int) $k["jml_kategori"] ?> kategori
                                 </a>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                <a href="/admin/konser.php?edit=<?= (int) $k["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
-                                <form action="/admin/konser.php" method="post" class="inline"
+                                <a href="/FunKonser/admin/konser.php?edit=<?= (int) $k["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
+                                <form action="/FunKonser/admin/konser.php" method="post" class="inline"
                                       onsubmit="return confirm('Hapus konser ini? Tindakan ini tidak bisa dibatalkan.');">
                                     <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                                     <input type="hidden" name="aksi" value="hapus">
@@ -479,6 +480,6 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
 
     </main>
 
-    <?php require_once __DIR__ . "/../src/sesi_warning.php"; ?>
+    <?php require_once __DIR__ . "/../src/session_warning.php"; ?>
 </body>
 </html>

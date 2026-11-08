@@ -14,8 +14,7 @@ if (!isset($_SESSION["user_id"])) {
 
 $sisa = SESSION_DURASI - (time() - ($_SESSION["last_activity"] ?? time()));
 if ($sisa <= 0) {
-    session_unset();
-    session_destroy();
+    akhiriSesi();
     tidakValid();
 }
 

@@ -1,14 +1,58 @@
 <?php require_once __DIR__ . "/src/cek_login.php"; ?>
 <?php
 require_once __DIR__ . "/src/session_init.php";
+require_once __DIR__ . "/src/koneksi.php";
 if (!isset($_SESSION["user_id"])) {
     header("Location: /src/login.php");
     exit;
 }
+
+function e($teks) { return htmlspecialchars((string) $teks, ENT_QUOTES, "UTF-8"); }
+function rupiah($angka) { return "Rp " . number_format((int) $angka, 0, ",", "."); }
+
+$q = is_string($_GET["q"] ?? null) ? trim($_GET["q"]) : "";
+$kota = is_string($_GET["kota"] ?? null) ? trim($_GET["kota"]) : "";
+$urut = is_string($_GET["urut"] ?? null) ? $_GET["urut"] : "tgl";
+$urutanOptions = [
+    "tgl" => "k.tanggal ASC",
+    "murah" => "CASE WHEN MIN(CASE WHEN kt.stok > 0 THEN kt.harga END) IS NULL THEN 1 ELSE 0 END ASC, MIN(CASE WHEN kt.stok > 0 THEN kt.harga END) ASC, k.tanggal ASC",
+    "mahal" => "CASE WHEN MIN(CASE WHEN kt.stok > 0 THEN kt.harga END) IS NULL THEN 1 ELSE 0 END ASC, MIN(CASE WHEN kt.stok > 0 THEN kt.harga END) DESC, k.tanggal ASC",
+];
+$urut = isset($urutanOptions[$urut]) ? $urut : "tgl";
+$urutan = $urutanOptions[$urut];
+
+$kotaStmt = $conn->query("SELECT DISTINCT kota FROM venues ORDER BY kota ASC");
+$sql = "
+    SELECT k.id, k.judul, k.artis, k.poster, k.tanggal, v.nama AS venue_nama, v.kota,
+           MIN(CASE WHEN kt.stok > 0 THEN kt.harga END) AS harga_mulai,
+           COALESCE(SUM(kt.stok), 0) AS stok_tersedia
+      FROM konser k
+      INNER JOIN venues v ON v.id = k.venue_id
+      LEFT JOIN kategori_tiket kt ON kt.konser_id = k.id
+     WHERE k.status = 'akan_datang'
+";
+$types = "";
+$params = [];
+if ($q !== "") {
+    $sql .= " AND (k.judul LIKE ? OR k.artis LIKE ?)";
+    $like = "%" . $q . "%";
+    $types .= "ss";
+    $params[] = $like;
+    $params[] = $like;
+}
+if ($kota !== "") {
+    $sql .= " AND v.kota = ?";
+    $types .= "s";
+    $params[] = $kota;
+}
+$sql .= " GROUP BY k.id, k.judul, k.artis, k.poster, k.tanggal, v.nama, v.kota ORDER BY " . $urutan;
+$konserStmt = $conn->prepare($sql);
+if ($params) $konserStmt->bind_param($types, ...$params);
+$konserStmt->execute();
+$konserList = $konserStmt->get_result();
 ?>
 
 <!DOCTYPE html>
-<?php require_once __DIR__ . "/src/session_warning.php";?>
 <html lang="id">
 
 <head>
@@ -72,8 +116,7 @@ if (!isset($_SESSION["user_id"])) {
         <a href="#" class="hover:text-white">Jual tiket</a>
       </nav>
       <div class="flex items-center gap-2">
-        <button class="text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10">Masuk</button>
-        <button class="text-sm font-bold px-4 py-2 rounded-lg bg-lemon text-ink hover:brightness-95">Daftar</button>
+        <span class="text-sm text-white/80"><?= e($_SESSION["nama"] ?? "Pengunjung") ?></span>
       </div>
     </div>
   </header>
@@ -84,17 +127,21 @@ if (!isset($_SESSION["user_id"])) {
       <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-3xl">Tiket konser, langsung di tanganmu.</h1>
       <p class="mt-4 text-lg text-white/85 max-w-xl">Cari konser di kotamu, pilih kursi, dan dapatkan e-tiket dalam
         hitungan menit.</p>
-      <div class="mt-8 bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 text-ink max-w-3xl shadow-xl">
+      <form action="/FunKonser/index.php" method="get" class="mt-8 bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 text-ink max-w-3xl shadow-xl">
         <label class="flex-1 flex items-center gap-2 px-3">
           <span aria-hidden="true">🔎</span>
-          <input id="q" type="search" placeholder="Cari artis atau nama konser"
+          <input id="q" name="q" type="search" value="<?= e($q) ?>" placeholder="Cari artis atau nama konser"
             class="w-full py-3 outline-none bg-transparent placeholder:text-ink/50">
         </label>
-        <select id="kota" aria-label="Kota" class="px-3 py-3 rounded-xl bg-mist font-medium outline-none">
+        <select id="kota" name="kota" aria-label="Kota" class="px-3 py-3 rounded-xl bg-mist font-medium outline-none">
           <option value="">Semua kota</option>
+          <?php while ($lokasi = $kotaStmt->fetch_assoc()): ?>
+            <option value="<?= e($lokasi["kota"]) ?>" <?= $kota === $lokasi["kota"] ? "selected" : "" ?>><?= e($lokasi["kota"]) ?></option>
+          <?php endwhile; ?>
         </select>
-        <button id="cari" class="bg-ink text-white font-bold px-6 py-3 rounded-xl hover:bg-ink/90">Cari tiket</button>
-      </div>
+        <input type="hidden" name="urut" value="<?= e($urut) ?>">
+        <button id="cari" type="submit" class="bg-ink text-white font-bold px-6 py-3 rounded-xl hover:bg-ink/90">Cari tiket</button>
+      </form>
     </div>
   </section>
 
@@ -103,11 +150,11 @@ if (!isset($_SESSION["user_id"])) {
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
       <div>
         <h2 class="text-2xl md:text-3xl font-extrabold">Konser mendatang</h2>
-        <p id="hitung" class="text-ink/60 mt-1"></p>
+        <p id="hitung" class="text-ink/60 mt-1"><?= $konserList->num_rows ?> konser ditemukan</p>
       </div>
       <div class="flex items-center gap-2">
         <label for="urut" class="text-sm text-ink/60">Urutkan</label>
-        <select id="urut" class="px-3 py-2 rounded-lg bg-white border border-ink/15 text-sm font-medium">
+        <select id="urut" name="urut" form="form-urut" class="px-3 py-2 rounded-lg bg-white border border-ink/15 text-sm font-medium">
           <option value="tgl">Tanggal terdekat</option>
           <option value="murah">Harga termurah</option>
           <option value="mahal">Harga termahal</option>
@@ -115,10 +162,41 @@ if (!isset($_SESSION["user_id"])) {
       </div>
     </div>
 
-    <div id="chips" class="flex flex-wrap gap-2 mt-6" role="group" aria-label="Genre"></div>
-    <div id="grid" class="grid gap-5 mt-8 md:grid-cols-2"></div>
-    <p id="kosong" class="hidden text-center py-16 text-ink/60">Belum ada konser yang cocok. Coba ubah kata kunci, kota,
-      atau genre.</p>
+    <form id="form-urut" action="/FunKonser/index.php" method="get">
+      <input type="hidden" name="q" value="<?= e($q) ?>">
+      <input type="hidden" name="kota" value="<?= e($kota) ?>">
+    </form>
+    <div id="grid" class="grid gap-5 mt-8 md:grid-cols-2">
+      <?php if ($konserList->num_rows === 0): ?>
+        <p id="kosong" class="md:col-span-2 text-center py-16 text-ink/60">Belum ada konser yang cocok. Coba ubah pencarian atau kota.</p>
+      <?php endif; ?>
+      <?php while ($konser = $konserList->fetch_assoc()): ?>
+        <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
+          <?php if ($konser["poster"]): ?>
+            <img src="<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="h-52 w-full object-cover">
+          <?php else: ?>
+            <div class="h-52 bg-gradient-to-br from-violet to-ink"></div>
+          <?php endif; ?>
+          <div class="p-5">
+            <p class="text-sm font-bold text-violet"><?= e(date("d M Y, H:i", strtotime($konser["tanggal"]))) ?> WIB</p>
+            <h3 class="mt-2 text-xl font-extrabold"><?= e($konser["judul"]) ?></h3>
+            <p class="mt-1 text-ink/60"><?= e($konser["artis"]) ?> · <?= e($konser["venue_nama"]) ?>, <?= e($konser["kota"]) ?></p>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <?php if ($konser["harga_mulai"] !== null): ?>
+                  <p class="text-xs text-ink/50">Harga mulai</p>
+                  <p class="font-extrabold text-violet"><?= rupiah($konser["harga_mulai"]) ?></p>
+                  <p class="text-xs text-ink/50"><?= (int) $konser["stok_tersedia"] ?> tiket tersedia</p>
+                <?php else: ?>
+                  <p class="font-bold text-ink/50">Tiket belum tersedia</p>
+                <?php endif; ?>
+              </div>
+              <a href="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>" class="rounded-xl bg-ink px-4 py-3 text-sm font-bold text-white hover:bg-violet">Lihat tiket</a>
+            </div>
+          </div>
+        </article>
+      <?php endwhile; ?>
+    </div>
   </main>
 
   <!-- Cara pesan -->
@@ -149,20 +227,13 @@ if (!isset($_SESSION["user_id"])) {
     </div>
   </footer>
 
-  <!-- Modal pemesanan -->
-  <div id="modal" class="fixed inset-0 z-40 hidden items-end md:items-center justify-center bg-ink/70 p-0 md:p-4"
-    role="dialog" aria-modal="true" aria-labelledby="m-judul">
-    <div class="bg-white w-full md:max-w-lg rounded-t-3xl md:rounded-3xl max-h-[92vh] overflow-y-auto">
-      <div class="flex items-start justify-between p-5 border-b border-ink/10">
-        <div>
-          <h3 id="m-judul" class="text-xl font-extrabold"></h3>
-          <p id="m-sub" class="text-sm text-ink/60 mt-0.5"></p>
-        </div>
-        <button id="tutup" class="p-2 -m-2 text-2xl leading-none" aria-label="Tutup">×</button>
-      </div>
-      <div id="m-isi" class="p-5"></div>
-    </div>
-  </div>
+  <script>
+    document.getElementById("urut").value = <?= json_encode($urut) ?>;
+    document.getElementById("urut").addEventListener("change", function () {
+      document.getElementById("form-urut").submit();
+    });
+  </script>
+  <?php require_once __DIR__ . "/src/session_warning.php"; ?>
 </body>
 
 </html>
