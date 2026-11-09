@@ -1,9 +1,9 @@
 <?php
 
 $host = "127.0.0.1";
-$user = "appuser";            
-$pass = "password123";        
-$db   = "funKonser";            
+$user = "root";            
+$pass = "";        
+$db   = "FunKonser";            
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 

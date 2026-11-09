@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 flash("err", "Gagal menghapus venue.");
             }
         }
-        alihkan("/admin/venue.php");
+        alihkan("/Funkonser/admin/venue.php");
     }
 
     // ----- SIMPAN (tambah / ubah) -----
@@ -80,13 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $u->bind_param("sssii", $form["nama"], $form["kota"], $form["alamat"], $kapasitas, $formId);
                     $u->execute();
                     flash("ok", "Venue berhasil diperbarui.");
-                    alihkan("/admin/venue.php");
+                    alihkan("/FunKonser/admin/venue.php");
                 } else {
                     $i = $conn->prepare("INSERT INTO venues (nama, kota, alamat, kapasitas) VALUES (?, ?, ?, ?)");
                     $i->bind_param("sssi", $form["nama"], $form["kota"], $form["alamat"], $kapasitas);
                     $i->execute();
                     flash("ok", "Venue berhasil ditambahkan.");
-                    alihkan("/admin/venue.php");
+                    alihkan("/FunKonser/admin/venue.php");
                 }
             } catch (mysqli_sql_exception $ex) {
                 $errors[] = "Terjadi kesalahan pada server. Coba lagi nanti.";
@@ -176,6 +176,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
                 <a href="/FunKonser/admin/venue.php" class="underline underline-offset-4">Venue</a>
                 <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
                 <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>
                 <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="hidden md:inline text-white/70">|</span>
@@ -193,7 +194,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 <p class="text-ink/60 mt-1">Tempat penyelenggaraan konser.</p>
             </div>
             <?php if (!$tampilForm): ?>
-                <a href="/admin/venue.php?tambah=1"
+                <a href="/FunKonser/admin/venue.php?tambah=1"
                    class="bg-violet text-white font-bold px-5 py-3 rounded-xl hover:brightness-110">+ Tambah Venue</a>
             <?php endif; ?>
         </div>
@@ -214,7 +215,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 </div>
             <?php endif; ?>
 
-            <form action="/admin/venue.php" method="post" class="mt-5 grid md:grid-cols-2 gap-5">
+            <form action="/FunKonser/admin/venue.php" method="post" class="mt-5 grid md:grid-cols-2 gap-5">
                 <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                 <input type="hidden" name="aksi" value="simpan">
                 <input type="hidden" name="id" value="<?= (int) $idForm ?>">
@@ -250,14 +251,14 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                     <button type="submit" class="bg-violet text-white font-bold px-6 py-3 rounded-xl hover:brightness-110">
                         <?= $idForm > 0 ? "Simpan Perubahan" : "Simpan" ?>
                     </button>
-                    <a href="/admin/venue.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
+                    <a href="/FunKonser/admin/venue.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
                 </div>
             </form>
         </section>
         <?php endif; ?>
 
         <!-- ============ DAFTAR VENUE ============ -->
-        <form method="get" action="/admin/venue.php" class="mt-6 flex flex-wrap gap-3">
+        <form method="get" action="/FunKonser/admin/venue.php" class="mt-6 flex flex-wrap gap-3">
             <input type="text" name="q" value="<?= e($q) ?>" placeholder="Cari nama venue atau kota..."
                    class="flex-1 min-w-[200px] border border-ink/20 rounded-xl px-4 py-3 outline-none focus:border-violet">
             <button type="submit" class="bg-ink text-white font-bold px-5 py-3 rounded-xl hover:brightness-125">Cari</button>
@@ -290,8 +291,8 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                             </td>
                             <td class="px-4 py-3"><?= (int) $v["jml_konser"] ?></td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                <a href="/admin/venue.php?edit=<?= (int) $v["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
-                                <form action="/admin/venue.php" method="post" class="inline"
+                                <a href="/FunKonser/admin/venue.php?edit=<?= (int) $v["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
+                                <form action="/FunKonser/admin/venue.php" method="post" class="inline"
                                       onsubmit="return confirm('Hapus venue ini?');">
                                     <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                                     <input type="hidden" name="aksi" value="hapus">
@@ -307,6 +308,6 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
 
     </main>
 
-    <?php require_once __DIR__ . "/../src/sesi_warning.php"; ?>
+    <?php require_once __DIR__ . "/../src/session_warning.php"; ?>
 </body>
 </html>

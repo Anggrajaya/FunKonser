@@ -289,6 +289,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
                 <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
+                <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
                 <a href="/FunKonser/admin/konser.php" class="underline underline-offset-4">Konser</a>
                 <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
                 <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>

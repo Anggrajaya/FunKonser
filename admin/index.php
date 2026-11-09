@@ -64,8 +64,9 @@ $badge = [
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
                 <a href="/FunKonser/admin/index.php" class="underline underline-offset-4">Dashboard</a>
-                <a href="/FunKonser/admin/venue.php">Vanue</a>
+                <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
                 <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
                 <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>
                 <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="hidden md:inline text-white/70">|</span>
@@ -110,8 +111,8 @@ $badge = [
             <h2 class="text-lg font-extrabold">Kelola</h2>
             <div class="mt-3 grid sm:grid-cols-3 gap-4">
                 <a href="/FunKonser/admin/vanue.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
-                    <p class="font-extrabold">Vanue</p>
-                    <p class="text-sm text-ink/60 mt-1">Tambah, ubah, dan hapus data vanue.</p>
+                    <p class="font-extrabold">Venue</p>
+                    <p class="text-sm text-ink/60 mt-1">Tambah, ubah, dan hapus data venue.</p>
                 </a>
                 <a href="/FunKonser/admin/konser.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
                     <p class="font-extrabold">Konser</p>

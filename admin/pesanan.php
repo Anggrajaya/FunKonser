@@ -110,6 +110,7 @@ $sampai = min($offset + PER_HALAMAN, $total);
                 <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
                 <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
                 <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
                 <a href="/FunKonser/admin/pesanan.php" class="underline underline-offset-4">Pesanan</a>
                 <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="hidden md:inline text-white/70">|</span>
@@ -218,6 +219,6 @@ $sampai = min($offset + PER_HALAMAN, $total);
 
     </main>
 
-    <?php require_once __DIR__ . "/../src/sesi_warning.php"; ?>
+    <?php require_once __DIR__ . "/../src/session_warning.php"; ?>
 </body>
 </html>
