@@ -114,9 +114,13 @@ $konserList = $konserStmt->get_result();
         <a href="#acara" class="hover:text-white">Konser</a>
         <a href="#cara" class="hover:text-white">Cara pesan</a>
         <a href="#" class="hover:text-white">Jual tiket</a>
+        <?php if (($_SESSION["role"] ?? "") === "admin"): ?>
+          <a href="/FunKonser/admin/index.php" class="hover:text-white">Dashboard</a>
+        <?php endif; ?>
       </nav>
       <div class="flex items-center gap-2">
         <span class="text-sm text-white/80"><?= e($_SESSION["nama"] ?? "Pengunjung") ?></span>
+        <a href="/FunKonser/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
       </div>
     </div>
   </header>
@@ -173,7 +177,7 @@ $konserList = $konserStmt->get_result();
       <?php while ($konser = $konserList->fetch_assoc()): ?>
         <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
           <?php if ($konser["poster"]): ?>
-            <img src="<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="h-52 w-full object-cover">
+            <img src="/FunKonser<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="h-52 w-full object-cover">
           <?php else: ?>
             <div class="h-52 bg-gradient-to-br from-violet to-ink"></div>
           <?php endif; ?>

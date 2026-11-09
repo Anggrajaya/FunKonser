@@ -389,7 +389,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                 <div class="md:col-span-2">
                     <label for="poster" class="block font-bold text-sm">Poster (JPG/PNG/WEBP, maks. 2 MB) :</label>
                     <?php if ($posterSekarang): ?>
-                        <img src="<?= e($posterSekarang) ?>" alt="Poster saat ini" class="mt-2 h-32 rounded-xl object-cover">
+                        <img src="/FunKonser/<?= e($posterSekarang) ?>" alt="Poster saat ini" class="mt-2 h-32 rounded-xl object-cover">
                         <p class="text-xs text-ink/50 mt-1">Pilih file baru hanya jika ingin mengganti poster.</p>
                     <?php endif; ?>
                     <input type="file" id="poster" name="poster" accept="image/jpeg,image/png,image/webp"
@@ -441,7 +441,7 @@ $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none foc
                         <tr class="border-t border-ink/10 align-middle">
                             <td class="px-4 py-3">
                                 <?php if ($k["poster"]): ?>
-                                    <img src="<?= e($k["poster"]) ?>" alt="" class="w-12 h-16 object-cover rounded-lg">
+                                    <img src="/FunKonser<?= e($k["poster"]) ?>" alt="" class="w-12 h-16 object-cover rounded-lg">
                                 <?php else: ?>
                                     <div class="w-12 h-16 rounded-lg bg-mist"></div>
                                 <?php endif; ?>
