@@ -1,6 +1,6 @@
 <?php
 
-$host = "127.0.0.1";
+$host = "sql311.infinityfree.com";
 $user = "if0_43432145";            
 $pass = "fleUpCEVpQ6VH";        
 $db   = "if0_43432145_FunKonser";            
