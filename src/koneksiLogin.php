@@ -40,8 +40,8 @@ $_SESSION["nama"]    = $user["nama"];
 $_SESSION["role"]    = $user["role"];
 
 if ($user["role"] === "admin") {
-    header("Location: /FunKonser/admin/index.php");
+    header("Location: /admin/index.php");
 } else {
-    header("Location: /FunKonser/index.php");
+    header("Location: /index.php");
 }
 exit;

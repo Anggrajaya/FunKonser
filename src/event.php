@@ -121,7 +121,7 @@ if ($konser && $_SERVER["REQUEST_METHOD"] === "POST") {
                 $conn->commit();
                 $transaksiAktif = false;
                 $_SESSION["flash_bayar"] = $flash;
-                header("Location: /FunKonser/src/event.php?id=" . $id);
+                header("Location: /src/event.php?id=" . $id);
                 exit;
             } catch (Throwable $ex) {
                 if ($transaksiAktif) $conn->rollback();
@@ -198,7 +198,7 @@ if ($konser && $_SERVER["REQUEST_METHOD"] === "POST") {
                 $transaksiAktif = false;
 
                 // Arahkan ke halaman yang sama dengan popup pembayaran terbuka
-                header("Location: /FunKonser/src/event.php?id=" . $id . "&bayar=" . rawurlencode($kode));
+                header("Location: /src/event.php?id=" . $id . "&bayar=" . rawurlencode($kode));
                 exit;
             } catch (Throwable $ex) {
                 if ($transaksiAktif) $conn->rollback();
@@ -261,22 +261,22 @@ if ($jumlah < 1) $jumlah = 1;
 <body class="min-h-screen bg-paper font-sans text-ink antialiased">
     <header class="bg-ink text-white">
         <div class="max-w-6xl mx-auto px-4 py-4">
-            <a href="/FunKonser/index.php" class="text-2xl font-extrabold tracking-tight">FunKonser<span class="text-lemon">.</span></a>
+            <a href="/index.php" class="text-2xl font-extrabold tracking-tight">FunKonser<span class="text-lemon">.</span></a>
         </div>
     </header>
 
     <?php if (!$konser): ?>
         <main class="max-w-6xl mx-auto px-4 py-20">
             <h1 class="text-3xl font-extrabold">Konser tidak ditemukan</h1>
-            <a class="mt-4 inline-block font-bold text-violet hover:underline" href="/FunKonser/index.php">Kembali ke daftar konser</a>
+            <a class="mt-4 inline-block font-bold text-violet hover:underline" href="/index.php">Kembali ke daftar konser</a>
         </main>
     <?php else: ?>
         <main class="max-w-6xl mx-auto px-4 py-8 md:py-12">
-            <a href="/FunKonser/index.php" class="text-sm font-bold text-violet hover:underline">← Kembali ke daftar konser</a>
+            <a href="/index.php" class="text-sm font-bold text-violet hover:underline">← Kembali ke daftar konser</a>
             <div class="mt-5 grid lg:grid-cols-3 gap-6">
                 <section class="lg:col-span-2 rounded-3xl bg-white shadow p-6 md:p-8">
                     <?php if ($konser["poster"]): ?>
-                        <img src="/FunKonser<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="w-full max-h-96 rounded-2xl object-cover">
+                        <img src="<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="w-full max-h-96 rounded-2xl object-cover">
                     <?php endif; ?>
                     <h1 class="mt-5 text-3xl md:text-4xl font-extrabold"><?= e($konser["judul"]) ?></h1>
                     <p class="mt-2 text-lg text-ink/70"><?= e($konser["artis"]) ?></p>
@@ -291,7 +291,7 @@ if ($jumlah < 1) $jumlah = 1;
                 </section>
 
                 <aside>
-                    <form action="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>" method="post" class="rounded-3xl bg-white p-6 shadow lg:sticky lg:top-6">
+                    <form action="/src/event.php?id=<?= (int) $konser["id"] ?>" method="post" class="rounded-3xl bg-white p-6 shadow lg:sticky lg:top-6">
                         <h2 class="text-xl font-extrabold">Pilih tiket</h2>
                         <?php if ($flashBayar && $flashBayar["jenis"] === "batal"): ?>
                             <div class="mt-4 rounded-xl bg-yellow-100 px-4 py-3 text-sm text-yellow-900" role="status">
@@ -350,7 +350,7 @@ if ($jumlah < 1) $jumlah = 1;
              role="dialog" aria-modal="true" aria-labelledby="judul-bayar">
             <div class="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-xl">
                 <form id="form-bayar" method="post"
-                      action="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>&amp;bayar=<?= e(rawurlencode($pesananBayar["kode_pesanan"])) ?>">
+                      action="/src/event.php?id=<?= (int) $konser["id"] ?>&amp;bayar=<?= e(rawurlencode($pesananBayar["kode_pesanan"])) ?>">
                     <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                     <input type="hidden" name="aksi" value="bayar">
                     <input type="hidden" name="kode" value="<?= e($pesananBayar["kode_pesanan"]) ?>">
@@ -392,7 +392,7 @@ if ($jumlah < 1) $jumlah = 1;
                     </button>
 
                     <div class="mt-3 flex items-center justify-between text-sm">
-                        <a href="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>" class="font-bold text-ink/60 hover:underline">Bayar nanti</a>
+                        <a href="/src/event.php?id=<?= (int) $konser["id"] ?>" class="font-bold text-ink/60 hover:underline">Bayar nanti</a>
                         <button type="submit" form="form-batal" id="tombol-batal"
                                 class="font-bold text-red-600 hover:underline">Batalkan pesanan</button>
                     </div>
@@ -400,7 +400,7 @@ if ($jumlah < 1) $jumlah = 1;
 
                 <!-- Form terpisah untuk pembatalan (dihubungkan lewat atribut form="form-batal") -->
                 <form id="form-batal" method="post"
-                      action="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>&amp;bayar=<?= e(rawurlencode($pesananBayar["kode_pesanan"])) ?>"
+                      action="/src/event.php?id=<?= (int) $konser["id"] ?>&amp;bayar=<?= e(rawurlencode($pesananBayar["kode_pesanan"])) ?>"
                       onsubmit="return confirm('Batalkan pesanan ini? Stok tiket akan dikembalikan.');">
                     <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                     <input type="hidden" name="aksi" value="batal">

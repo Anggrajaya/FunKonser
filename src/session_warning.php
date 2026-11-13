@@ -49,7 +49,7 @@ $sisaAwal = SESSION_DURASI - (time() - ($_SESSION["last_activity"] ?? time()));
     }
 
     function habis() {
-        window.location.href = "/FunKonser/src/login.php?timeout=1";
+        window.location.href = "/src/login.php?timeout=1";
     }
 
     setInterval(function () {
@@ -62,7 +62,7 @@ $sisaAwal = SESSION_DURASI - (time() - ($_SESSION["last_activity"] ?? time()));
     }, 1000);
 
     document.getElementById("btn-lanjut").addEventListener("click", function () {
-        fetch("/FunKonser/src/session.php", { method: "POST", credentials: "same-origin" })
+        fetch("/src/session.php", { method: "POST", credentials: "same-origin" })
             .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
             .then(function (d) {
                 deadline = Date.now() + d.sisa * 1000;
@@ -72,7 +72,7 @@ $sisaAwal = SESSION_DURASI - (time() - ($_SESSION["last_activity"] ?? time()));
     });
 
     document.getElementById("btn-keluar").addEventListener("click", function () {
-        window.location.href = "/FunKonser/src/logout.php";
+        window.location.href = "/src/logout.php";
     });
 })();
 </script>

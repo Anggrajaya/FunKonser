@@ -115,12 +115,12 @@ $konserList = $konserStmt->get_result();
         <a href="#cara" class="hover:text-white">Cara pesan</a>
         <a href="#" class="hover:text-white">Jual tiket</a>
         <?php if (($_SESSION["role"] ?? "") === "admin"): ?>
-          <a href="/FunKonser/admin/index.php" class="hover:text-white">Dashboard</a>
+          <a href="/admin/index.php" class="hover:text-white">Dashboard</a>
         <?php endif; ?>
       </nav>
       <div class="flex items-center gap-2">
         <span class="text-sm text-white/80"><?= e($_SESSION["nama"] ?? "Pengunjung") ?></span>
-        <a href="/FunKonser/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
+        <a href="/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
       </div>
     </div>
   </header>
@@ -131,7 +131,7 @@ $konserList = $konserStmt->get_result();
       <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-3xl">Tiket konser, langsung di tanganmu.</h1>
       <p class="mt-4 text-lg text-white/85 max-w-xl">Cari konser di kotamu, pilih kursi, dan dapatkan e-tiket dalam
         hitungan menit.</p>
-      <form action="/FunKonser/index.php" method="get" class="mt-8 bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 text-ink max-w-3xl shadow-xl">
+      <form action="/index.php" method="get" class="mt-8 bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 text-ink max-w-3xl shadow-xl">
         <label class="flex-1 flex items-center gap-2 px-3">
           <span aria-hidden="true">🔎</span>
           <input id="q" name="q" type="search" value="<?= e($q) ?>" placeholder="Cari artis atau nama konser"
@@ -166,7 +166,7 @@ $konserList = $konserStmt->get_result();
       </div>
     </div>
 
-    <form id="form-urut" action="/FunKonser/index.php" method="get">
+    <form id="form-urut" action="/index.php" method="get">
       <input type="hidden" name="q" value="<?= e($q) ?>">
       <input type="hidden" name="kota" value="<?= e($kota) ?>">
     </form>
@@ -177,7 +177,7 @@ $konserList = $konserStmt->get_result();
       <?php while ($konser = $konserList->fetch_assoc()): ?>
         <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
           <?php if ($konser["poster"]): ?>
-            <img src="/FunKonser<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="h-52 w-full object-cover">
+            <img src="<?= e($konser["poster"]) ?>" alt="Poster <?= e($konser["judul"]) ?>" class="h-52 w-full object-cover">
           <?php else: ?>
             <div class="h-52 bg-gradient-to-br from-violet to-ink"></div>
           <?php endif; ?>
@@ -195,7 +195,7 @@ $konserList = $konserStmt->get_result();
                   <p class="font-bold text-ink/50">Tiket belum tersedia</p>
                 <?php endif; ?>
               </div>
-              <a href="/FunKonser/src/event.php?id=<?= (int) $konser["id"] ?>" class="rounded-xl bg-ink px-4 py-3 text-sm font-bold text-white hover:bg-violet">Lihat tiket</a>
+              <a href="/src/event.php?id=<?= (int) $konser["id"] ?>" class="rounded-xl bg-ink px-4 py-3 text-sm font-bold text-white hover:bg-violet">Lihat tiket</a>
             </div>
           </div>
         </article>

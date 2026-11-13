@@ -63,15 +63,15 @@ $badge = [
                 <span class="ml-2 text-xs font-bold bg-lemon text-ink rounded-full px-2 py-1 align-middle">ADMIN</span>
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
-                <a href="/FunKonser/admin/index.php" class="underline underline-offset-4">Dashboard</a>
-                <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
-                <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
-                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
-                <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>
-                <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
+                <a href="/admin/index.php" class="underline underline-offset-4">Dashboard</a>
+                <a href="/admin/venue.php" class="hover:underline">Venue</a>
+                <a href="/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/admin/kategori.php" class="hover:underline">Kategori</a>
+                <a href="/admin/pesanan.php" class="hover:underline">Pesanan</a>
+                <a href="/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="hidden md:inline text-white/70">|</span>
                 <span class="text-white/80"><?= e($_SESSION["nama"] ?? "Admin") ?></span>
-                <a href="/FunKonser/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
+                <a href="/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
             </nav>
         </div>
     </header>
@@ -110,19 +110,19 @@ $badge = [
         <section class="mt-8">
             <h2 class="text-lg font-extrabold">Kelola</h2>
             <div class="mt-3 grid sm:grid-cols-3 gap-4">
-                <a href="/FunKonser/admin/vanue.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
+                <a href="/admin/venue.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
                     <p class="font-extrabold">Venue</p>
                     <p class="text-sm text-ink/60 mt-1">Tambah, ubah, dan hapus data venue.</p>
                 </a>
-                <a href="/FunKonser/admin/konser.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
+                <a href="/admin/konser.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
                     <p class="font-extrabold">Konser</p>
                     <p class="text-sm text-ink/60 mt-1">Tambah, ubah, dan hapus data konser.</p>
                 </a>
-                <a href="/FunKonser/admin/kategori.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
+                <a href="/admin/kategori.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
                     <p class="font-extrabold">Kategori Tiket</p>
                     <p class="text-sm text-ink/60 mt-1">Atur harga dan stok tiket.</p>
                 </a>
-                <a href="/FunKonser/admin/pesanan.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
+                <a href="/admin/pesanan.php" class="bg-white rounded-2xl shadow p-5 hover:ring-2 hover:ring-violet">
                     <p class="font-extrabold">Pesanan</p>
                     <p class="text-sm text-ink/60 mt-1">Pantau dan kelola pesanan masuk.</p>
                 </a>
@@ -133,7 +133,7 @@ $badge = [
         <section class="mt-8">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-extrabold">Pesanan Terbaru</h2>
-                <a href="/FunKonser/admin/pesanan.php" class="text-sm font-bold text-violet hover:underline">Lihat semua</a>
+                <a href="/admin/pesanan.php" class="text-sm font-bold text-violet hover:underline">Lihat semua</a>
             </div>
 
             <div class="mt-3 bg-white rounded-2xl shadow overflow-x-auto">

@@ -20,14 +20,14 @@ if (isset($_GET["konser_id"])) {
     $filterKonserId = filter_var(is_scalar($_GET["konser_id"]) ? $_GET["konser_id"] : 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 2147483647]]);
     if ($filterKonserId === false) {
         flash("err", "Konser tidak valid.");
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
     $cekKonser = $conn->prepare("SELECT id FROM konser WHERE id = ?");
     $cekKonser->bind_param("i", $filterKonserId);
     $cekKonser->execute();
     if ($cekKonser->get_result()->num_rows === 0) {
         flash("err", "Konser tidak ditemukan.");
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
     $form["konser_id"] = $filterKonserId;
 }
@@ -44,13 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $formId = $id === false ? 0 : $id;
     if (!in_array($aksi, ["hapus", "simpan"], true)) {
         flash("err", "Aksi kategori tidak valid.");
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
 
     if ($aksi === "hapus") {
         if ($formId <= 0) {
             flash("err", "Kategori tidak valid.");
-            alihkan("/FunKonser/admin/kategori.php");
+            alihkan("/admin/kategori.php");
         }
 
         $transaksiAktif = false;
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 flash("err", "Terjadi kesalahan saat menghapus kategori. Coba lagi nanti.");
             }
         }
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
 
     if ($aksi === "simpan") {
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
                 $simpan->execute();
                 flash("ok", $formId > 0 ? "Kategori berhasil diperbarui." : "Kategori berhasil ditambahkan.");
-                alihkan("/FunKonser/admin/kategori.php");
+                alihkan("/admin/kategori.php");
             } catch (Throwable $ex) {
                 error_log("Gagal menyimpan kategori tiket: " . $ex->getMessage());
                 $errors[] = "Terjadi kesalahan saat menyimpan kategori. Coba lagi nanti.";
@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST" && isset($_GET["edit"])) {
     $formId = filter_var(is_scalar($_GET["edit"]) ? $_GET["edit"] : 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 2147483647]]);
     if ($formId === false) {
         flash("err", "Kategori tidak valid.");
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
     $ambil = $conn->prepare("SELECT konser_id, nama, harga, stok FROM kategori_tiket WHERE id = ?");
     $ambil->bind_param("i", $formId);
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST" && isset($_GET["edit"])) {
     $data = $ambil->get_result()->fetch_assoc();
     if (!$data) {
         flash("err", "Kategori tidak ditemukan.");
-        alihkan("/FunKonser/admin/kategori.php");
+        alihkan("/admin/kategori.php");
     }
     $form = $data;
 }
@@ -188,7 +188,7 @@ if ($filterKonserId > 0) {
     $daftar = $conn->query($sqlDaftar . " ORDER BY k.tanggal DESC, kt.nama ASC");
 }
 $input = "mt-1 w-full border border-ink/20 rounded-xl px-4 py-3 outline-none focus:border-violet focus:ring-2 focus:ring-violet/30";
-$urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "&konser_id=" . $filterKonserId : "");
+$urlTambah = "/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "&konser_id=" . $filterKonserId : "");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -208,17 +208,17 @@ $urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "
 <body class="min-h-screen bg-paper font-sans text-ink antialiased">
     <header class="bg-violet text-white">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
-            <a href="/FunKonser/admin/index.php" class="text-2xl font-extrabold tracking-tight">
+            <a href="/admin/index.php" class="text-2xl font-extrabold tracking-tight">
                 FunKonser<span class="text-lemon">.</span>
                 <span class="ml-2 text-xs font-bold bg-lemon text-ink rounded-full px-2 py-1 align-middle">ADMIN</span>
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
-                <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
-                <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
-                <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
-                <a href="/FunKonser/admin/kategori.php" class="underline underline-offset-4">Kategori</a>
-                <a href="/FunKonser/admin/pesanan.php" class="hover:underline">Pesanan</a>
-                <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
+                <a href="/admin/index.php" class="hover:underline">Dashboard</a>
+                <a href="/admin/venue.php" class="hover:underline">Venue</a>
+                <a href="/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/admin/kategori.php" class="underline underline-offset-4">Kategori</a>
+                <a href="/admin/pesanan.php" class="hover:underline">Pesanan</a>
+                <a href="/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="text-white/80"><?= e($_SESSION["nama"] ?? "Admin") ?></span>
             </nav>
         </div>
@@ -233,7 +233,7 @@ $urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "
             <a href="<?= e($urlTambah) ?>" class="bg-violet text-white font-bold px-5 py-3 rounded-xl hover:brightness-110">+ Tambah Kategori</a>
         </div>
         <?php if ($filterKonserId > 0): ?>
-            <p class="mt-4 text-sm text-ink/60">Menampilkan kategori untuk konser yang dipilih. <a href="/FunKonser/admin/kategori.php" class="font-bold text-violet hover:underline">Tampilkan semua</a></p>
+            <p class="mt-4 text-sm text-ink/60">Menampilkan kategori untuk konser yang dipilih. <a href="/admin/kategori.php" class="font-bold text-violet hover:underline">Tampilkan semua</a></p>
         <?php endif; ?>
 
         <?php if ($flash): ?>
@@ -248,7 +248,7 @@ $urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "
                     <?php foreach ($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            <form action="/FunKonser/admin/kategori.php" method="post" class="mt-5 grid md:grid-cols-2 gap-5">
+            <form action="/admin/kategori.php" method="post" class="mt-5 grid md:grid-cols-2 gap-5">
                 <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                 <input type="hidden" name="aksi" value="simpan">
                 <input type="hidden" name="id" value="<?= (int) $formId ?>">
@@ -275,7 +275,7 @@ $urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "
                 </div>
                 <div class="md:col-span-2 flex gap-3">
                     <button type="submit" class="bg-violet text-white font-bold px-6 py-3 rounded-xl hover:brightness-110"><?= $formId > 0 ? "Simpan Perubahan" : "Simpan" ?></button>
-                    <a href="/FunKonser/admin/kategori.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
+                    <a href="/admin/kategori.php" class="border border-ink/20 font-bold px-6 py-3 rounded-xl hover:bg-gray-50">Batal</a>
                 </div>
             </form>
         </section>
@@ -303,8 +303,8 @@ $urlTambah = "/FunKonser/admin/kategori.php?tambah=1" . ($filterKonserId > 0 ? "
                             <td class="px-4 py-3 whitespace-nowrap"><?= rupiah($kategori["harga"]) ?></td>
                             <td class="px-4 py-3"><?= (int) $kategori["stok"] ?></td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                <a href="/FunKonser/admin/kategori.php?edit=<?= (int) $kategori["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
-                                <form action="/FunKonser/admin/kategori.php" method="post" class="inline" onsubmit="return confirm('Hapus kategori ini? Kategori yang sudah digunakan dalam pesanan tidak dapat dihapus.');">
+                                <a href="/admin/kategori.php?edit=<?= (int) $kategori["id"] ?>" class="font-bold text-violet hover:underline">Ubah</a>
+                                <form action="/admin/kategori.php" method="post" class="inline" onsubmit="return confirm('Hapus kategori ini? Kategori yang sudah digunakan dalam pesanan tidak dapat dihapus.');">
                                     <input type="hidden" name="csrf" value="<?= e($_SESSION["csrf"]) ?>">
                                     <input type="hidden" name="aksi" value="hapus">
                                     <input type="hidden" name="id" value="<?= (int) $kategori["id"] ?>">

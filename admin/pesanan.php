@@ -74,7 +74,7 @@ function urlHal($h, $q, $fs) {
     $p = ["hal" => $h];
     if ($q !== "")  $p["q"] = $q;
     if ($fs !== "") $p["status"] = $fs;
-    return "/FunKonser/admin/pesanan.php?" . http_build_query($p);
+    return "/admin/pesanan.php?" . http_build_query($p);
 }
 
 $dari   = $total === 0 ? 0 : $offset + 1;
@@ -102,17 +102,17 @@ $sampai = min($offset + PER_HALAMAN, $total);
 
     <header class="bg-violet text-white">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
-            <a href="/FunKonser/admin/index.php" class="text-2xl font-extrabold tracking-tight">
+            <a href="/admin/index.php" class="text-2xl font-extrabold tracking-tight">
                 FunKonser<span class="text-lemon">.</span>
                 <span class="ml-2 text-xs font-bold bg-lemon text-ink rounded-full px-2 py-1 align-middle">ADMIN</span>
             </a>
             <nav class="flex flex-wrap items-center gap-4 text-sm font-bold">
-                <a href="/FunKonser/admin/index.php" class="hover:underline">Dashboard</a>
-                <a href="/FunKonser/admin/venue.php" class="hover:underline">Venue</a>
-                <a href="/FunKonser/admin/konser.php" class="hover:underline">Konser</a>
-                <a href="/FunKonser/admin/kategori.php" class="hover:underline">Kategori</a>
-                <a href="/FunKonser/admin/pesanan.php" class="underline underline-offset-4">Pesanan</a>
-                <a href="/FunKonser/index.php" class="hover:underline">Lihat Situs</a>
+                <a href="/admin/index.php" class="hover:underline">Dashboard</a>
+                <a href="/admin/venue.php" class="hover:underline">Venue</a>
+                <a href="/admin/konser.php" class="hover:underline">Konser</a>
+                <a href="/admin/kategori.php" class="hover:underline">Kategori</a>
+                <a href="/admin/pesanan.php" class="underline underline-offset-4">Pesanan</a>
+                <a href="/index.php" class="hover:underline">Lihat Situs</a>
                 <span class="hidden md:inline text-white/70">|</span>
                 <span class="text-white/80"><?= e($_SESSION["nama"] ?? "Admin") ?></span>
                 <a href="/src/logout.php" class="bg-white text-violet rounded-xl px-3 py-2 hover:brightness-95">Keluar</a>
@@ -126,7 +126,7 @@ $sampai = min($offset + PER_HALAMAN, $total);
         <p class="text-ink/60 mt-1">Semua pesanan tiket yang masuk.</p>
 
         <!-- Pencarian dan filter -->
-        <form method="get" action="/FunKonser/admin/pesanan.php" class="mt-6 flex flex-wrap gap-3">
+        <form method="get" action="/admin/pesanan.php" class="mt-6 flex flex-wrap gap-3">
             <input type="text" name="q" value="<?= e($q) ?>" placeholder="Cari kode, nama, atau email pembeli..."
                    class="flex-1 min-w-[220px] border border-ink/20 rounded-xl px-4 py-3 outline-none focus:border-violet">
             <select name="status" class="border border-ink/20 rounded-xl px-4 py-3 bg-white">
@@ -139,7 +139,7 @@ $sampai = min($offset + PER_HALAMAN, $total);
             </select>
             <button type="submit" class="bg-ink text-white font-bold px-5 py-3 rounded-xl hover:brightness-125">Cari</button>
             <?php if ($q !== "" || $fs !== ""): ?>
-                <a href="/FunKonser/admin/pesanan.php" class="border border-ink/20 font-bold px-5 py-3 rounded-xl hover:bg-gray-50">Reset</a>
+                <a href="/admin/pesanan.php" class="border border-ink/20 font-bold px-5 py-3 rounded-xl hover:bg-gray-50">Reset</a>
             <?php endif; ?>
         </form>
 

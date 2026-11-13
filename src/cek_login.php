@@ -6,14 +6,14 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: /FunKonser/src/login.php");
+    header("Location: /src/login.php");
     exit;
 }
 
 if (isset($_SESSION["last_activity"]) &&
     (time() - $_SESSION["last_activity"]) > SESSION_DURASI) {
     akhiriSesi();
-    header("Location: /FunKonser/src/login.php?timeout=1");
+    header("Location: /src/login.php?timeout=1");
     exit;
 }
 
